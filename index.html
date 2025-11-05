@@ -34,18 +34,23 @@ h1 {
   box-shadow: 0 20px 50px rgba(0,0,0,0.7);
   background: #111;
   border: 2px solid rgba(255,255,255,0.1);
+  width: 100%;
+  max-width: 540px; /* tetap seperti ukuran semula di layar besar */
+  margin: auto;
 }
 
 /* VIDEO & FRAME */
 video, canvas, #frame-overlay {
-  width: 540px;
-  height: 400px;
+  width: 100%;       /* sebelumnya 540px, sekarang otomatis */
+  height: auto;      /* sebelumnya 400px */
+  aspect-ratio: 4 / 3; /* menjaga proporsi video */
   border-radius: 30px;
   object-fit: cover;
   box-shadow: inset 0 0 25px rgba(255,255,255,0.08);
   transform: scaleX(-1);
 }
 
+/* FRAME OVERLAY (bingkai) */
 #frame-overlay {
   position: absolute;
   top: 0;
@@ -55,6 +60,20 @@ video, canvas, #frame-overlay {
   border-radius: 30px;
   box-shadow: 0 0 25px rgba(255,255,255,0.2);
   transform: scaleX(-1);
+  z-index: 2;
+}
+
+/* --- RESPONSIVE UNTUK HP --- */
+@media (max-width: 600px) {
+  #camera-container {
+    max-width: 95%; /* agar tidak melebihi layar HP */
+  }
+
+  video, canvas, #frame-overlay {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
 }
 
 /* COUNTDOWN NEON */
@@ -295,7 +314,19 @@ select {
 
   #videoWrapper {
   transform-origin: center;
+  }
+
+  /* Pastikan frame mengikuti ukuran video/canvas */
+#frameOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;       /* sesuaikan otomatis */
+  height: 100%;      /* sesuaikan otomatis */
+  object-fit: cover; /* biar frame menyesuaikan tanpa ketarik */
+  pointer-events: none; /* biar nggak ganggu klik di bawahnya */
 }
+
 }
 </style>
 </head>
@@ -306,11 +337,11 @@ select {
 <div id="main-container" style="display:flex; gap:30px; justify-content:center; align-items:flex-start;">
 
   <!-- KOLOM KIRI: tombol utama -->
-  <div id="left-panel" style="display:flex; flex-direction:column; gap:12px;">
+  <div id="left-panel" style="display:flex; flex-direction:column; gap:3px;">
     <button id="startBtn">Nyalakan Kamera</button>
     <button id="captureBtn">Ambil Foto</button>
     <button id="videoBtn">Video</button>
-    <button id="deleteBtn">Delete Foto/Video</button>
+    <button id="deleteBtn">Hapus Foto/Video</button>
     <button id="downloadBtn">Download Hasil</button>
     <button id="stopBtn">Matikan Kamera</button>
   </div>
@@ -333,7 +364,7 @@ select {
   </div>
 
   <!-- KOLOM KANAN: timer, filter, frame -->
-  <div id="right-panel" style="display:flex; flex-direction:column; gap:12px;">
+  <div id="right-panel" style="display:flex; flex-direction:column; gap:22px;">
     <label for="timerSelect">Timer:</label>
     <select id="timerSelect">
       <option value="0">Tanpa Timer</option>
